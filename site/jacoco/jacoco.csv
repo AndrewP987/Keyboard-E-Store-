@@ -1,0 +1,11 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+estore-api,com.estore.api.estoreapi,WebConfig,0,35,0,0,0,4,0,2,0,2
+estore-api,com.estore.api.estoreapi,EstoreApiApplication,5,3,0,0,2,1,1,1,1,1
+estore-api,com.estore.api.estoreapi.persistence,InventoryFileDAO,4,335,3,21,1,68,3,24,0,15
+estore-api,com.estore.api.estoreapi.persistence,UserFileDAO,96,510,12,24,28,110,12,26,0,20
+estore-api,com.estore.api.estoreapi.model,Keyboard.SwitchColor,0,27,0,0,0,5,0,1,0,1
+estore-api,com.estore.api.estoreapi.model,Keyboard.Size,0,21,0,0,0,4,0,1,0,1
+estore-api,com.estore.api.estoreapi.model,Keyboard,46,150,8,4,9,41,6,18,1,17
+estore-api,com.estore.api.estoreapi.model,User,2,103,1,1,1,27,1,14,0,14
+estore-api,com.estore.api.estoreapi.controller,UserController,177,467,19,33,37,106,15,28,0,17
+estore-api,com.estore.api.estoreapi.controller,InventoryController,106,133,4,10,27,32,4,12,1,8

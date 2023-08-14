@@ -1,0 +1,62 @@
+[
+    {
+        "username": "bob",
+        "password": "bob",
+        "userOrderHistory": [],
+        "userCart": [
+            {
+                "size": "FULL",
+                "switchColor": "BLACK",
+                "price": 199,
+                "quantity": 1,
+                "keyboardId": 2,
+                "keyboardName": "Logitech G915"
+            },
+            {
+                "size": "FULL",
+                "switchColor": "BLACK",
+                "price": 149,
+                "quantity": 1,
+                "keyboardId": 1,
+                "keyboardName": "Corsair K70"
+            },
+            {
+                "size": "FULL",
+                "switchColor": "BLACK",
+                "price": 149,
+                "quantity": 1,
+                "keyboardId": 1,
+                "keyboardName": "Corsair K70"
+            }
+        ],
+        "loginStatus": false
+    },
+    {
+        "username": "fulcrum",
+        "password": "fulcrumcomein",
+        "userOrderHistory": [],
+        "userCart": [],
+        "loginStatus": false
+    },
+    {
+        "username": "admin",
+        "password": "admin",
+        "userOrderHistory": [],
+        "userCart": [],
+        "loginStatus": false
+    },
+    {
+        "username": "asdf",
+        "password": "ssddddddf",
+        "userOrderHistory": [],
+        "userCart": [],
+        "loginStatus": false
+    },
+    {
+        "username": "Kanye",
+        "password": "West",
+        "userOrderHistory": [],
+        "userCart": [],
+        "loginStatus": false
+    }
+]

@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventoryController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.controller</a> &gt; <span class="el_source">InventoryController.java</span></div><h1>InventoryController.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.controller;
+
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.estore.api.estoreapi.model.Keyboard;
+import com.estore.api.estoreapi.model.Keyboard.Size;
+import com.estore.api.estoreapi.model.Keyboard.SwitchColor;
+import com.estore.api.estoreapi.persistence.InventoryDAO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+/**
+ * KeyboardController is a REST API controller class that implements CRUD
+ * operations for Keyboard objects.
+ * It uses the inventoryDAO class to interact with the persistence layer and
+ * provides the API endpoint for keyboard operations.
+ *
+ * @version 1.0
+ * @lastupdate 02/13/2023
+ */
+@RestController
+@RequestMapping(&quot;keyboards&quot;)
+public class InventoryController {
+<span class="fc" id="L36">    private static final Logger LOG = Logger.getLogger(InventoryController.class.getName());</span>
+    private InventoryDAO inventoryDAO;
+
+    /**
+     * Constructor that initializes the KeyboardController with a inventoryDAO.
+     * 
+     * @param inventoryDAO the inventoryDAO instance to be used by the
+     *                     KeyboardController.
+     */
+<span class="fc" id="L45">    public InventoryController(InventoryDAO inventoryDAO) {</span>
+<span class="fc" id="L46">        this.inventoryDAO = inventoryDAO;</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * A GET API endpoint that returns a Keyboard object with the specified id.
+     * 
+     * @param id the id of the keyboard to be retrieved.
+     * @return a ResponseEntity with a status code of 200 (OK) if the keyboard is
+     *         found,
+     *         404 (NOT_FOUND) if the keyboard with the specified id does not exist,
+     *         or 500 (INTERNAL_SERVER_ERROR) if an IOException occurs.
+     */
+    @GetMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Keyboard&gt; getKeyboard(@PathVariable int id) {
+<span class="fc" id="L60">        LOG.info(&quot;GET /keyboards/&quot; + id);</span>
+        try {
+<span class="fc" id="L62">            Keyboard keyboard = inventoryDAO.getKeyboard(id);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">            if (keyboard != null) {</span>
+<span class="fc" id="L64">                return new ResponseEntity&lt;Keyboard&gt;(keyboard, HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L66">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+<span class="nc" id="L68">        } catch (IOException e) {</span>
+<span class="nc" id="L69">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L70">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * A GET API endpoint that returns an array of all Keyboard objects.
+     * 
+     * @return a ResponseEntity with a status code of 200 (OK) if the keyboards are
+     *         found,
+     *         500 (INTERNAL_SERVER_ERROR) if an IOException occurs.
+     */
+    @GetMapping(&quot;&quot;)
+    public ResponseEntity&lt;Keyboard[]&gt; getKeyboards() {
+<span class="fc" id="L83">        LOG.info(&quot;GET /keyboards&quot;);</span>
+
+        try {
+<span class="fc" id="L86">            Keyboard[] keyboards = inventoryDAO.getKeyboards();</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">            if (keyboards.length &gt; 0) {</span>
+<span class="fc" id="L88">                return new ResponseEntity&lt;Keyboard[]&gt;(keyboards, HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L90">                return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+            }
+<span class="nc" id="L92">        } catch (IOException e) {</span>
+<span class="nc" id="L93">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L94">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * A GET API endpoint that returns an array of Keyboard objects with the
+     * specified name.
+     * 
+     * @param name the name of the keyboards to be retrieved.
+     * @return a ResponseEntity with a status code of 200 (OK) if the keyboards are
+     *         found,
+     *         500 (INTERNAL_SERVER_ERROR) if an IOException occurs.
+     */
+    @GetMapping(&quot;/&quot;)
+    public ResponseEntity&lt;Keyboard[]&gt; searchKeyboards(@RequestParam String name) {
+<span class="fc" id="L109">        LOG.info(&quot;GET /keyboards/?name=&quot; + name);</span>
+
+        try {
+<span class="fc" id="L112">            Keyboard[] userNames = inventoryDAO.findKeyboard(name);</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">            if (userNames != null) {</span>
+<span class="fc" id="L114">                return new ResponseEntity&lt;Keyboard[]&gt;(userNames, HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L116">                return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+            }
+<span class="nc" id="L118">        } catch (IOException e) {</span>
+<span class="nc" id="L119">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L120">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * A POST API endpoint that creates a new Keyboard object.
+     * 
+     * @param keyboard the Keyboard object to be created.
+     * @return a ResponseEntity with a status code of 201 (CREATED) if the keyboard
+     *         is successfully created,
+     *         409 (CONFLICT) if a keyboard with the same id already exists,
+     *         or 500 (INTERNAL_SERVER_ERROR) if an IOException occurs.
+     */
+    @PostMapping(&quot;&quot;)
+    public ResponseEntity&lt;Keyboard&gt; createKeyboard(@RequestBody Keyboard keyboard) {
+<span class="fc" id="L135">        LOG.info(&quot;POST /keyboards &quot; + keyboard);</span>
+
+        try {
+<span class="fc" id="L138">            Keyboard createdKeyboard = inventoryDAO.createKeyboard(keyboard);</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">            if (createdKeyboard == null) {</span>
+<span class="nc" id="L140">                return new ResponseEntity&lt;&gt;(HttpStatus.CONFLICT);</span>
+            } else {
+<span class="fc" id="L142">                return new ResponseEntity&lt;Keyboard&gt;(createdKeyboard, HttpStatus.CREATED);</span>
+            }
+<span class="nc" id="L144">        } catch (IOException e) {</span>
+<span class="nc" id="L145">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L146">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * A PUT API endpoint that updates a Keyboard object.
+     * 
+     * @param keyboard the Keyboard object to be updated.
+     * @return a ResponseEntity with a status code of 201 (UPDATED) if the keyboard
+     *         is successfully updated. Otherwise,
+     *         409 (CONFLICT), if the keybaord does not exist, or 500
+     *         (INTERNAL_SERVER_ERROR) if an IOException occurs.
+     */
+    @PutMapping(&quot;&quot;)
+    public ResponseEntity&lt;Keyboard&gt; updateKeyboard(@RequestBody Keyboard keyboard) {
+<span class="fc" id="L161">        LOG.info(&quot;PUT /keyboards &quot; + keyboard);</span>
+
+        try {
+<span class="fc" id="L164">            Keyboard keyboardUpdated = inventoryDAO.updateKeyboard(keyboard);</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">            if (keyboardUpdated != null) {</span>
+<span class="fc" id="L166">                return new ResponseEntity&lt;&gt;(keyboardUpdated, HttpStatus.OK);</span>
+            } else {
+<span class="nc" id="L168">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+<span class="nc" id="L170">        } catch (IOException e) {</span>
+<span class="nc" id="L171">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L172">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * A DELETE API endpoint that deletes a Keyboard object.
+     * 
+     * @param keyboard the Keyboard object to be deleted.
+     * @return a ResponseEntity with a status code of 201 (DELETED) if the keyboard
+     *         is successfully deleted,
+     *         409 (CONFLICT) if the keyboard does not exist,
+     *         or 500 (INTERNAL_SERVER_ERROR) if an IOException occurs.
+     */
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;Keyboard&gt; deleteKeyboard(@PathVariable int id) {
+<span class="fc" id="L187">        LOG.info(&quot;DELETE /keyboards/&quot; + id);</span>
+
+        try {
+<span class="fc" id="L190">            boolean isDeleted = inventoryDAO.deleteKeyboard(id);</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">            if (isDeleted) {</span>
+<span class="fc" id="L192">                return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L194">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+<span class="nc" id="L196">        } catch (IOException e) {</span>
+<span class="nc" id="L197">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L198">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * 
+     * A GET API endpoint that filters Keyboard objects by price range.
+     * 
+     * @param fromPrice the lower limit of the price range.
+     * @param toPrice   the upper limit of the price range.
+     * @return a ResponseEntity with a status code of 200 (OK) and an array of
+     *         Keyboard objects
+     *         filtered by price range if the operation is successful,
+     *         or a ResponseEntity with a status code of 500 (INTERNAL_SERVER_ERROR)
+     *         if an IOException occurs.
+     * @throws IOException if an IOException occurs while accessing the
+     *                     inventoryDAO.
+     */
+    @GetMapping(&quot;/filter/fromPrice={fromPrice}&amp;toPrice={toPrice}&quot;)
+    public ResponseEntity&lt;Keyboard[]&gt; filterKeyboards(@PathVariable String fromPrice,
+            @PathVariable String toPrice) throws IOException {
+
+        try {
+<span class="nc" id="L221">            Keyboard[] keyboards = inventoryDAO.getFilteredKeyboards(fromPrice, toPrice);</span>
+
+<span class="nc bnc" id="L223" title="All 2 branches missed.">            if (keyboards != null) {</span>
+<span class="nc" id="L224">                return new ResponseEntity&lt;Keyboard[]&gt;(keyboards, HttpStatus.OK);</span>
+            } else {
+<span class="nc" id="L226">                return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+            }
+<span class="nc" id="L228">        } catch (IOException e) {</span>
+<span class="nc" id="L229">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L230">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

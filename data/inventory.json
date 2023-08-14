@@ -1,0 +1,162 @@
+[
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 149,
+        "quantity": 10,
+        "keyboardId": 1,
+        "keyboardName": "Corsair K70"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 199,
+        "quantity": 10,
+        "keyboardId": 2,
+        "keyboardName": "Logitech G915"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 119,
+        "quantity": 10,
+        "keyboardId": 3,
+        "keyboardName": "Razer BlackWIdow V3"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 99,
+        "quantity": 10,
+        "keyboardId": 4,
+        "keyboardName": "Ducky One 2 Mini"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 179,
+        "quantity": 10,
+        "keyboardId": 5,
+        "keyboardName": "SteelSeries Apex Pro"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 89,
+        "quantity": 10,
+        "keyboardId": 6,
+        "keyboardName": "Keychron K2"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 79,
+        "quantity": 10,
+        "keyboardId": 7,
+        "keyboardName": "Anne Pro 2"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 69,
+        "quantity": 10,
+        "keyboardId": 8,
+        "keyboardName": "HyperX Alloy FPS Pro"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 89,
+        "quantity": 10,
+        "keyboardId": 9,
+        "keyboardName": "Cooler Master CK552"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 109,
+        "quantity": 10,
+        "keyboardId": 10,
+        "keyboardName": "Glorious GMMK"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 129,
+        "quantity": 10,
+        "keyboardId": 11,
+        "keyboardName": "Varmilo VA87M"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 169,
+        "quantity": 10,
+        "keyboardId": 12,
+        "keyboardName": "Das Keyboard 4 Professional"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 129,
+        "quantity": 10,
+        "keyboardId": 13,
+        "keyboardName": "Filco"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 119,
+        "quantity": 10,
+        "keyboardId": 14,
+        "keyboardName": "Leopold FC900R"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 99,
+        "quantity": 10,
+        "keyboardId": 15,
+        "keyboardName": "Durgod Taurus K320"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 159,
+        "quantity": 10,
+        "keyboardId": 16,
+        "keyboardName": "WASD Code V3"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 169,
+        "quantity": 10,
+        "keyboardId": 17,
+        "keyboardName": "Cherry MX Board 6.0"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 229,
+        "quantity": 10,
+        "keyboardId": 18,
+        "keyboardName": "Topre Realforce RGB"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 149,
+        "quantity": 10,
+        "keyboardId": 19,
+        "keyboardName": "Roccat Vulcan Pro"
+    },
+    {
+        "size": "FULL",
+        "switchColor": "BLACK",
+        "price": 119,
+        "quantity": 10,
+        "keyboardId": 20,
+        "keyboardName": "Fnatic Streak65"
+    }
+]
