@@ -1,0 +1,89 @@
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300&family=Raleway:ital,wght@1,300&display=swap"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+/>
+
+<app-navbar></app-navbar>
+
+<br />
+<br />
+<br />
+
+<div class="keySearch">
+  <app-keyboard-search></app-keyboard-search>
+</div>
+<h2 class="inventory">Inventory</h2>
+
+<div class="checkboxes">
+  <label class="label-box option" for="fromprice">From Price:</label>
+  <input
+    type="number"
+    id="fromprice"
+    name="fromprice"
+    #fromPrice
+    min="1"
+    max="999"
+    required
+  />
+  <label class="label-box option" for="toprice">To Price:</label>
+  <input
+    type="number"
+    id="toprice"
+    name="toprice"
+    #toPrice
+    min="1"
+    max="999"
+    required
+  />
+  <button
+    class="label-box profile-button"
+    (click)="this.getFiltered(fromPrice.value, toPrice.value)"
+  >
+    Filter
+  </button>
+  <button class="label-box profile-button" (click)="this.getKeyboards()">
+    Display All
+  </button>
+</div>
+
+<div class="product-grid">
+  <div class="login-box" *ngFor="let keyboard of keyboards">
+    <div class="product-img">
+      <div class="product-details">
+        <h2 class="product-name">{{ keyboard.keyboardName }}</h2>
+        <p class="product-price">Price: ${{ keyboard.price }}</p>
+        <p class="product-price" *ngIf="keyboard.quantity <= 0">OUT OF STOCK</p>
+      </div>
+      <a routerLink="/keyboards/{{ keyboard.keyboardId }}">
+        <button class="add-to-cart-button" *ngIf="keyboard.quantity > 0">
+          <span class="material-symbols-outlined"> construction </span>
+        </button>
+      </a>
+      <button
+        class="add-to-cart-button"
+        *ngIf="keyboard.quantity > 0"
+        (click)="addToCart(keyboard)"
+      >
+        <span class="material-symbols-outlined"> add_shopping_cart </span>
+      </button>
+    </div>
+  </div>
+</div>

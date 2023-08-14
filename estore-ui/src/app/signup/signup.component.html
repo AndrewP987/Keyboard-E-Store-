@@ -1,0 +1,39 @@
+<div class="signup-box">
+  <h2>Sign Up</h2>
+  <form>
+    <div class="user-box">
+      <input
+        #username
+        (change)="userUsernameCreation(username.value)"
+        placeholder=""
+        type="text"
+        name=""
+        required=""
+        maxlength="14"
+        pattern="[a-zA-Z0-9 ]*"
+      />
+      <label>Username</label>
+    </div>
+    <div class="user-box">
+      <input
+        #password
+        (change)="userPassCreation(password.value)"
+        placeholder=""
+        type="password"
+        name=""
+        required=""
+        maxlength="14"
+        pattern="[a-zA-Z0-9 ]*"
+      />
+      <label>Password</label>
+    </div>
+
+    <a href="#" (click)="signup()">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      Submit
+    </a>
+  </form>
+</div>

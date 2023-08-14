@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300&family=Raleway:ital,wght@1,300&display=swap"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0"
+/>
+<br />
+<br />
+<br />
+<br />
+<h2>Order History</h2>
+
+<div class="card-grid">
+  <div class="card card-custom" *ngFor="let keyboard of user?.userOrderHistory">
+    <div class="card-body">
+      <h2 class="card-title">{{ keyboard.keyboardName }}</h2>
+      <p class="card-text">Purchase Price: {{ keyboard.price | currency }}</p>
+      <p class="card-text">Quantity: {{ keyboard.quantity }}</p>
+    </div>
+  </div>
+</div>

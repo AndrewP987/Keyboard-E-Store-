@@ -1,7 +1,0 @@
-com/estore/api/estoreapi/persistence/InventoryFileDAOTest.class
-com/estore/api/estoreapi/model/KeyboardTest.class
-com/estore/api/estoreapi/model/UserTest.class
-com/estore/api/estoreapi/persistence/UserFileDAOTest.class
-com/estore/api/estoreapi/EstoreApiApplicationTests.class
-com/estore/api/estoreapi/controller/UserControllerTest.class
-com/estore/api/estoreapi/controller/InventoryControllerTest.class

@@ -1,0 +1,15 @@
+div {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 150px;
+
+}
+html, body{
+  background-color: #808080;
+  height:100%;
+}
+
+app-login,
+app-signup {
+  width: 48%;
+}

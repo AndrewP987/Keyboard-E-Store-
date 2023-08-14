@@ -1,0 +1,42 @@
+<div class="login-box">
+  <h2>Login</h2>
+  <form>
+    <div class="user-box">
+      <input
+        #username
+        (change)="userLoginChange(username.value)"
+        placeholder=""
+        type=""
+        name=""
+        required=""
+        maxlength="14"
+        pattern="[a-zA-Z0-9 ]*"
+      />
+      <label>Username</label>
+    </div>
+    <div class="user-box">
+      <input
+        #password
+        (change)="userPassChange(password.value)"
+        placeholder=""
+        type=""
+        name=""
+        required=""
+        maxlength="14"
+        pattern="[a-zA-Z0-9 ]*"
+      />
+      <label>Password</label>
+    </div>
+
+    <a href="#" (click)="login()">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      Submit
+    </a>
+  </form>
+</div>
+
+
+

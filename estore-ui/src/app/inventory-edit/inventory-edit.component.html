@@ -1,0 +1,31 @@
+<app-keyboard-add></app-keyboard-add>
+
+<h2 class="inventory">Inventory</h2>
+
+<div class="product-grid">
+  <div class="login-box" *ngFor="let keyboard of keyboards">
+    <div class="product-img">
+      <div class="product-details">
+        <h2 class="product-name">{{ keyboard.keyboardName }}</h2>
+        <p class="product-price">ID: #{{ keyboard.keyboardId }}</p>
+        <p class="product-price">Price: ${{ keyboard.price }}</p>
+        <p class="product-price">Quantity: {{ keyboard.quantity }}</p>
+      </div>
+      <a
+        *ngIf="user!.username == 'admin'"
+        routerLink="/edit/{{ keyboard.keyboardId }}"
+      >
+        <button class="customize-button">Edit Listing</button>
+      </a>
+
+      <button
+        *ngIf="user!.username == 'admin'"
+        class="add-button"
+        style="display: inline-block"
+        (click)="delete(keyboard)"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
