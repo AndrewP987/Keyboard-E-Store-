@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Keyboard.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.model</a> &gt; <span class="el_source">Keyboard.java</span></div><h1>Keyboard.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.model;
+
+import java.util.Objects;
+import java.util.logging.Logger;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class Keyboard {
+<span class="fc" id="L9">    private static final Logger LOG = Logger.getLogger(Keyboard.class.getName());</span>
+
+    static final String STRING_FORMAT = &quot;Keyboard [id=%d, name=%s, size=%s, switchColor=%s, price=%d, quantity=%d]&quot;;
+
+<span class="fc" id="L13">    public enum Size {</span>
+<span class="fc" id="L14">        FULL,</span>
+<span class="fc" id="L15">        TKL,</span>
+<span class="fc" id="L16">        SIXTY</span>
+    }
+
+<span class="fc" id="L19">    public enum SwitchColor {</span>
+<span class="fc" id="L20">        BLACK,</span>
+<span class="fc" id="L21">        RED,</span>
+<span class="fc" id="L22">        BLUE,</span>
+<span class="fc" id="L23">        BROWN</span>
+    }
+
+    @JsonProperty(&quot;keyboardId&quot;)
+    private int id;
+    @JsonProperty(&quot;keyboardName&quot;)
+    private String name;
+    @JsonProperty(&quot;price&quot;)
+    private int price;
+    @JsonProperty(&quot;quantity&quot;)
+    private int quantity;
+    @JsonProperty(&quot;size&quot;)
+    public Size size;
+    @JsonProperty(&quot;switchColor&quot;)
+    public SwitchColor switchColor;
+
+    /**
+     * Create a keyboard with the given id and name
+     * 
+     * @param id   The id of the keyboard
+     * @param name The name of the keyboard
+     * 
+     *             {@literal @}JsonProperty is used in serialization and
+     *             deserialization
+     *             of the JSON object to the Java object in mapping the fields. If a
+     *             field
+     *             is not provided in the JSON object, the Java field gets the
+     *             default Java
+     *             value, i.e. 0 for int
+     */
+    public Keyboard(@JsonProperty(&quot;id&quot;) int id, @JsonProperty(&quot;name&quot;) String name,
+            @JsonProperty(&quot;size&quot;) Size size, @JsonProperty(&quot;switchColor&quot;) SwitchColor switchColor,
+<span class="fc" id="L55">            @JsonProperty(&quot;price&quot;) int price, @JsonProperty(&quot;quantity&quot;) int quantity) {</span>
+<span class="fc" id="L56">        this.id = id;</span>
+<span class="fc" id="L57">        this.name = name;</span>
+<span class="fc" id="L58">        this.size = size;</span>
+<span class="fc" id="L59">        this.switchColor = switchColor;</span>
+<span class="fc" id="L60">        this.price = price;</span>
+<span class="fc" id="L61">        this.quantity = quantity;</span>
+<span class="fc" id="L62">    }</span>
+
+    /**
+     * 
+     * Duplicates an Keyboard with single quantity
+     * 
+     * @param keyboard Keyboard to duplicate
+     */
+<span class="nc" id="L70">    public Keyboard(Keyboard keyboard) {</span>
+<span class="nc" id="L71">        this.id = keyboard.getKeyboardId();</span>
+<span class="nc" id="L72">        this.name = keyboard.getKeyboardName();</span>
+<span class="nc" id="L73">        this.size = keyboard.getSize();</span>
+<span class="nc" id="L74">        this.switchColor = keyboard.getSwitchColor();</span>
+<span class="nc" id="L75">        this.price = keyboard.getPrice();</span>
+<span class="nc" id="L76">        this.quantity = 1;</span>
+<span class="nc" id="L77">    }</span>
+
+    /**
+     * 
+     * Creates a new Keyboard based on the given Keyboard and quantity.
+     * 
+     * @param keyboard Keybaord to create
+     */
+<span class="fc" id="L85">    public Keyboard(Keyboard keyboard, int quantity) {</span>
+<span class="fc" id="L86">        this.id = keyboard.getKeyboardId();</span>
+<span class="fc" id="L87">        this.name = keyboard.getKeyboardName();</span>
+<span class="fc" id="L88">        this.size = keyboard.getSize();</span>
+<span class="fc" id="L89">        this.switchColor = keyboard.getSwitchColor();</span>
+<span class="fc" id="L90">        this.price = keyboard.getPrice();</span>
+<span class="fc" id="L91">        this.quantity = quantity;</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Returns the keyboard's ID.
+     * 
+     * @return the keyboard's ID
+     */
+    public int getKeyboardId() {
+<span class="fc" id="L100">        return id;</span>
+    }
+
+    /**
+     * Sets the keyboard's ID.
+     * 
+     * @param id the new keyboard ID
+     */
+    public void setKeyboardId(int id) {
+<span class="fc" id="L109">        this.id = id;</span>
+<span class="fc" id="L110">    }</span>
+
+    /**
+     * Returns the keyboard's name.
+     * 
+     * @return the keyboard's name
+     */
+    public String getKeyboardName() {
+<span class="fc" id="L118">        return name;</span>
+    }
+
+    /**
+     * Sets the keyboard's name.
+     * 
+     * @param keyboardName the new keyboard name
+     */
+    public void setKeyboardName(String name) {
+<span class="fc" id="L127">        this.name = name;</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Returns the keyboard's name.
+     * 
+     * @return the keyboard's name
+     */
+    public SwitchColor getSwitchColor() {
+<span class="fc" id="L136">        return switchColor;</span>
+    }
+
+    /**
+     * Sets the keyboard's name.
+     * 
+     * @param keyboardName the new keyboard name
+     */
+    public void setSwitchColor(SwitchColor color) {
+<span class="fc" id="L145">        this.switchColor = color;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Returns the keyboard's name.
+     * 
+     * @return the keyboard's name
+     */
+    public Size getSize() {
+<span class="fc" id="L154">        return size;</span>
+    }
+
+    /**
+     * Sets the keyboard's name.
+     * 
+     * @param keyboardName the new keyboard name
+     */
+    public void setSize(Size size) {
+<span class="fc" id="L163">        this.size = size;</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Returns the keyboard's price.
+     * 
+     * @return the keyboard's price
+     */
+    public int getPrice() {
+<span class="fc" id="L172">        return price;</span>
+    }
+
+    /**
+     * Sets the keyboard's price.
+     * 
+     * @param price the new keyboard price
+     */
+    public void setPrice(int price) {
+<span class="fc" id="L181">        this.price = price;</span>
+<span class="fc" id="L182">    }</span>
+
+    /**
+     * Returns the keyboard's quantity.
+     * 
+     * @return the keyboard's quantity
+     */
+    public int getQuantity() {
+<span class="fc" id="L190">        return quantity;</span>
+    }
+
+    /**
+     * Sets the keyboard's quantity.
+     * 
+     * @param quantity the new keyboard quantity
+     */
+    public void setQuantity(int quantity) {
+<span class="fc" id="L199">        this.quantity = quantity;</span>
+<span class="fc" id="L200">    }</span>
+
+    /**
+     * Checks if the two given Keyboard instances are equal to each other
+     * 
+     * @param keyboardFirst the first Keyboard to be checked
+     * 
+     * @param keyboardSecod the second Keyboard to be checked
+     *
+     * @return boolean true if equal, false otherwise
+     */
+    @Override
+    public boolean equals(Object o) {
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        if (o == this)</span>
+<span class="fc" id="L214">            return true;</span>
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (!(o instanceof Keyboard)) {</span>
+<span class="nc" id="L216">            return false;</span>
+        }
+<span class="fc" id="L218">        Keyboard keyboard = (Keyboard) o;</span>
+<span class="pc bpc" id="L219" title="7 of 8 branches missed.">        return id == keyboard.id &amp;&amp; Objects.equals(name, keyboard.name) &amp;&amp; price == keyboard.price</span>
+                &amp;&amp; quantity == keyboard.quantity;
+    }
+
+    /**
+     * Returns a string representation of the Keyboard object.
+     * 
+     * @return a string representation of the Keyboard object
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L230">        return String.format(STRING_FORMAT, id, name, size, switchColor, price, quantity);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

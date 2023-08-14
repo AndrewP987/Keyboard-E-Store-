@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.controller</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.controller;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.estore.api.estoreapi.persistence.InventoryDAO;
+import com.estore.api.estoreapi.persistence.UserDAO;
+import com.estore.api.estoreapi.model.Keyboard;
+import com.estore.api.estoreapi.model.User;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * class to handle http methods GET, POST, and DELETE for users
+ */
+@RestController
+@RequestMapping(&quot;user&quot;)
+public class UserController {
+<span class="fc" id="L30">    private static final Logger LOG = Logger.getLogger(UserController.class.getName());</span>
+    private UserDAO userDAO;
+    private InventoryDAO inventoryDAO;
+
+    /**
+     * Constructor to initialize the userController with its DAO
+     * 
+     * @param userDAO      the userDAO instance to be used in the UserController
+     * @param inventoryDAO the inventoryDAO instance to be used in the
+     *                     UserController
+     */
+<span class="fc" id="L41">    public UserController(UserDAO userDAO, InventoryDAO inventoryDAO) {</span>
+<span class="fc" id="L42">        this.userDAO = userDAO;</span>
+<span class="fc" id="L43">        this.inventoryDAO = inventoryDAO;</span>
+<span class="fc" id="L44">    }</span>
+
+    /**
+     * gets a user from the json file as requested by http
+     * 
+     * @param username user to get
+     * @return a ResponseEntity with a status code of 200 (OK) if the user is found,
+     *         or 404 (NOT_FOUND) if the keyboard with the specified id does not
+     *         exist.
+     */
+    @GetMapping(&quot;/{username}&quot;)
+    public ResponseEntity&lt;User&gt; getUser(@PathVariable String username) throws IOException {
+<span class="fc" id="L56">        LOG.info(&quot;GET /user/&quot; + username);</span>
+<span class="fc" id="L57">        User user = userDAO.getUser(username);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (user != null) {</span>
+<span class="fc" id="L59">            return new ResponseEntity&lt;User&gt;(user, HttpStatus.OK);</span>
+        } else {
+<span class="fc" id="L61">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+
+    }
+
+    /**
+     * gets all users from the json file as requested by http
+     * 
+     * @return a ResponseEntity with a status code of 200 (OK) if the user is found
+     */
+    @GetMapping(&quot;&quot;)
+    public ResponseEntity&lt;User[]&gt; getUsers() {
+<span class="fc" id="L73">        LOG.info(&quot;GET /users&quot;);</span>
+<span class="fc" id="L74">        User[] users = userDAO.getUsers();</span>
+<span class="fc" id="L75">        return new ResponseEntity&lt;User[]&gt;(users, HttpStatus.OK);</span>
+    }
+
+    /**
+     * uses the UserDAO to create a user from the username requested
+     * 
+     * @param user of the user to create
+     * @return a ResponseEntity with a status code of 201 (CREATED) if the user
+     *         is successfully created,
+     *         409 (CONFLICT) if a user with the same username already exists,
+     *         or 500 (INTERNAL_SERVER_ERROR) if an IOException occurs.
+     */
+    @PostMapping(&quot;&quot;)
+    public ResponseEntity&lt;User&gt; createUser(@RequestBody User user) {
+<span class="fc" id="L89">        LOG.info(&quot;POST /user &quot; + user);</span>
+        try {
+<span class="fc" id="L91">            User userToCreate = userDAO.createUser(user);</span>
+<span class="fc bfc" id="L92" title="All 2 branches covered.">            if (userToCreate != null) {</span>
+<span class="fc" id="L93">                return new ResponseEntity&lt;&gt;(userToCreate, HttpStatus.CREATED);</span>
+            } else {
+<span class="fc" id="L95">                return new ResponseEntity&lt;&gt;(HttpStatus.CONFLICT);</span>
+            }
+<span class="fc" id="L97">        } catch (IOException e) {</span>
+<span class="fc" id="L98">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="fc" id="L99">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Updates an existing User with the information contained in the provided User
+     * object.
+     *
+     * @param newUser a User object containing the updated information
+     * @return a ResponseEntity containing the updated User object and an HTTP
+     *         status code
+     *         of OK (200) if the update was successful, or NOT_FOUND (404) if no
+     *         User object
+     *         with the specified username exists
+     *         or INTERNAL_SERVER_ERROR (500) if an I/O error occurs while updating
+     *         the user
+     * @throws IOException if an I/O error occurs while retrieving or updating the
+     *                     User object
+     */
+
+    @PutMapping(&quot;&quot;)
+    public ResponseEntity&lt;User&gt; updateUser(@RequestBody User newUser) {
+<span class="fc" id="L121">        LOG.info(&quot;PUT /user/&quot; + newUser.getUsername());</span>
+
+        try {
+<span class="fc" id="L124">            User userToUpdate = userDAO.getUser(newUser.getUsername());</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">            if (userToUpdate == null) {</span>
+<span class="fc" id="L126">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            } else {
+<span class="fc" id="L128">                userToUpdate = userDAO.updateUser(userToUpdate);</span>
+<span class="fc" id="L129">                return new ResponseEntity&lt;&gt;(userToUpdate, HttpStatus.OK);</span>
+            }
+<span class="fc" id="L131">        } catch (IOException e) {</span>
+<span class="fc" id="L132">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="fc" id="L133">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * deletes a user from the website's storage based on http request
+     * 
+     * @param username user to delete
+     * @return http status of delete
+     */
+    @DeleteMapping(&quot;/{username}&quot;)
+    public ResponseEntity&lt;User&gt; deleteUser(@PathVariable String username) {
+<span class="fc" id="L145">        LOG.info(&quot;DELETE /user/&quot; + username);</span>
+
+        try {
+<span class="fc" id="L148">            boolean isDeleted = userDAO.deleteAccount(username);</span>
+<span class="fc bfc" id="L149" title="All 2 branches covered.">            if (isDeleted) {</span>
+<span class="fc" id="L150">                return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L152">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+<span class="fc" id="L154">        } catch (IOException e) {</span>
+<span class="fc" id="L155">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="fc" id="L156">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Retrieves a User object with the specified username and logs the user in.
+     *
+     * @param username the username of the User object to retrieve and log in
+     * @param password the password of the User object to retrieve and log in
+     * @return a ResponseEntity containing the retrieved User object and an HTTP
+     *         status code
+     *         of OK (200) if the login was successful and the User object exists,
+     *         UNAUTHORIZED (401) if the username does not match the provided
+     *         username,
+     *         or NOT_FOUND (404) if no User object with the specified username
+     *         exists
+     *         or INTERNAL_SERVER_ERROR (500) if an I/O error occurs while
+     *         retrieving or updating the user
+     * @throws IOException if an I/O error occurs while retrieving or updating the
+     *                     User object
+     */
+    @PutMapping(&quot;/login/username={username}&amp;password={password}&quot;)
+    public ResponseEntity&lt;User&gt; login(@PathVariable String username, @PathVariable String password) {
+<span class="fc" id="L179">        LOG.info(&quot;GET /login/username=&quot; + username + &quot;?password=&quot; + password);</span>
+
+        try {
+<span class="fc" id="L182">            User user = userDAO.getUser(username);</span>
+
+<span class="fc bfc" id="L184" title="All 2 branches covered.">            if (user == null) {</span>
+<span class="fc" id="L185">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+
+<span class="pc bpc" id="L188" title="1 of 4 branches missed.">            if (user.getUsername().equals(username) &amp;&amp; user.getPassword().equals(password)) {</span>
+
+<span class="fc" id="L190">                userDAO.login(user);</span>
+<span class="fc" id="L191">                return new ResponseEntity&lt;User&gt;(user, HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L193">                return new ResponseEntity&lt;&gt;(HttpStatus.UNAUTHORIZED);</span>
+            }
+
+<span class="fc" id="L196">        } catch (IOException e) {</span>
+<span class="fc" id="L197">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="fc" id="L198">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * A PUT API endpoint that logs out a user with the given username and password.
+     * 
+     * @param username the username of the user to be logged out.
+     * @param password the password of the user to be logged out.
+     * 
+     * @return a ResponseEntity with a status code of 200 (OK) if the user is
+     *         successfully logged out,
+     *         or a ResponseEntity with a status code of 404 (NOT_FOUND) if the user
+     *         is not found,
+     *         or a ResponseEntity with a status code of 500 (INTERNAL_SERVER_ERROR)
+     *         if an IOException occurs.
+     */
+    @PutMapping(&quot;/logout/username={username}&amp;password={password}&quot;)
+    public ResponseEntity&lt;User&gt; logout(@PathVariable String username, @PathVariable String password) {
+<span class="fc" id="L217">        LOG.info(&quot;GET /logout/username=&quot; + username + &quot;?password=&quot; + password);</span>
+
+        try {
+<span class="fc" id="L220">            User user = userDAO.getUser(username);</span>
+<span class="fc bfc" id="L221" title="All 2 branches covered.">            if (user == null) {</span>
+<span class="fc" id="L222">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            } else {
+<span class="fc" id="L224">                userDAO.logout(user);</span>
+<span class="fc" id="L225">                return new ResponseEntity&lt;&gt;(HttpStatus.OK);</span>
+            }
+<span class="fc" id="L227">        } catch (IOException e) {</span>
+<span class="fc" id="L228">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="fc" id="L229">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * Retrieves the shopping cart of the User with the specified username.
+     *
+     * @param username the username of the User object to retrieve the shopping cart
+     *                 for
+     * @return a ResponseEntity containing an ArrayList of Keyboard objects
+     *         representing the User's shopping cart
+     *         and an HTTP status code of OK (200) if the User object exists and
+     *         contains a non-empty cart,
+     *         or NOT_FOUND (404) if no User object with the specified username
+     *         exists or the User object's cart is empty
+     */
+    @GetMapping(&quot;/{username}/cart&quot;)
+    public ResponseEntity&lt;ArrayList&lt;Keyboard&gt;&gt; getUserShoppingCart(@PathVariable String username) {
+<span class="fc" id="L247">        LOG.info(&quot;GET /&quot; + username + &quot;/cart&quot;);</span>
+
+<span class="fc" id="L249">        User currUser = userDAO.getUser(username);</span>
+<span class="pc bpc" id="L250" title="1 of 2 branches missed.">        if (currUser != null) {</span>
+<span class="nc" id="L251">            ArrayList&lt;Keyboard&gt; currUserCart = userDAO.getUser(currUser.getUsername()).getUserCart();</span>
+<span class="nc bnc" id="L252" title="All 2 branches missed.">            if (currUserCart != null) {</span>
+<span class="nc" id="L253">                return new ResponseEntity&lt;ArrayList&lt;Keyboard&gt;&gt;(currUserCart, HttpStatus.OK);</span>
+            } else {
+<span class="nc" id="L255">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+        } else {
+<span class="fc" id="L258">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+    }
+
+    /**
+     * 
+     * PUT mapping for updating user shopping cart. Adds a new keyboard to the
+     * user's shopping cart and updates the quantity of the keyboard in the
+     * inventory.
+     * 
+     * @param keyboard the keyboard to be added to the user's cart.
+     * @param username the username of the user whose cart is being updated.
+     * @return ResponseEntity&lt;User&gt; containing the updated user object and
+     *         HttpStatus.CREATED if the cart was updated successfully.
+     *         ResponseEntity with HttpStatus.NOT_FOUND if the user was not found.
+     */
+    @PutMapping(&quot;/{username}/cart&quot;)
+    public ResponseEntity&lt;User&gt; addToCart(@RequestBody Keyboard keyboard, @PathVariable String username) {
+<span class="fc" id="L276">        LOG.info(&quot;PUT /&quot; + username + &quot;: &quot; + keyboard);</span>
+
+        try {
+<span class="fc" id="L279">            User currUser = userDAO.getUser(username);</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">            if (currUser != null) {</span>
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">                if (userDAO.addToUserCart(currUser, keyboard, keyboard.getQuantity())) {</span>
+<span class="nc" id="L282">                    Keyboard keyIndex = inventoryDAO.getKeyboard(keyboard.getKeyboardId());</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">                    if (keyboard.equals(keyIndex)) {</span>
+<span class="nc" id="L284">                        keyIndex.setQuantity(keyIndex.getQuantity() - 1);</span>
+<span class="nc" id="L285">                        inventoryDAO.updateKeyboard(keyIndex);</span>
+                    }
+                }
+<span class="fc" id="L288">                return new ResponseEntity&lt;User&gt;(currUser, HttpStatus.CREATED);</span>
+            } else {
+<span class="fc" id="L290">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+
+<span class="nc" id="L293">        } catch (IOException e) {</span>
+<span class="nc" id="L294">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L295">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * 
+     * DELETE mapping for clearing a user's shopping cart after purchase.
+     * 
+     * @param username the username of the user whose cart is being cleared.
+     * @return ResponseEntity&lt;User&gt; containing the updated user object and
+     *         HttpStatus.OK if the cart was cleared successfully. ResponseEntity
+     *         with HttpStatus.NOT_FOUND if the user was not found.
+     */
+    @DeleteMapping(&quot;/{username}/clearCart&quot;)
+    public ResponseEntity&lt;User&gt; clearCartAfterPurchase(@PathVariable String username) {
+<span class="fc" id="L310">        LOG.info(&quot;DELETE /&quot; + username + &quot;/clearCart&quot;);</span>
+
+        try {
+<span class="fc" id="L313">            User user = userDAO.getUser(username);</span>
+
+<span class="fc bfc" id="L315" title="All 2 branches covered.">            if (user == null)</span>
+<span class="fc" id="L316">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            else {
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">                if (userDAO.clearUserCart(user)) {</span>
+<span class="nc" id="L319">                    return new ResponseEntity&lt;User&gt;(user, HttpStatus.OK);</span>
+                } else
+<span class="fc" id="L321">                    throw new IOException();</span>
+            }
+
+<span class="fc" id="L324">        } catch (IOException e) {</span>
+<span class="fc" id="L325">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="fc" id="L326">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * 
+     * A DELETE API endpoint that removes a Keyboard object from a user's cart.
+     * 
+     * @param username the username of the user whose cart the Keyboard object will
+     *                 be removed from.
+     * @param keyboard the Keyboard object to be removed from the user's cart.
+     * @return a ResponseEntity with a status code of 200 (OK) and the updated User
+     *         object if the operation is successful,
+     *         css
+     *         Copy code
+     *         or a ResponseEntity with a status code of 404 (NOT_FOUND) if the user
+     *         or the Keyboard object is not found,
+     *         css
+     *         Copy code
+     *         or a ResponseEntity with a status code of 500 (INTERNAL_SERVER_ERROR)
+     *         if an IOException occurs.
+     */
+    @DeleteMapping(&quot;/{username}/removeFromCart&quot;)
+    public ResponseEntity&lt;User&gt; removeFromCart(@PathVariable String username, @RequestBody Keyboard keyboard) {
+<span class="fc" id="L350">        LOG.info(&quot;DELETE /&quot; + username + &quot;/removeFromCart/keyboard&quot; + &quot;:&quot; + keyboard);</span>
+
+        try {
+<span class="fc" id="L353">            User currUser = userDAO.getUser(username);</span>
+<span class="pc bpc" id="L354" title="1 of 2 branches missed.">            if (currUser != null) {</span>
+<span class="nc bnc" id="L355" title="All 2 branches missed.">                if (userDAO.removeFromCart(currUser, keyboard)) {</span>
+<span class="nc" id="L356">                    return new ResponseEntity&lt;User&gt;(currUser, HttpStatus.OK);</span>
+                } else {
+<span class="nc" id="L358">                    return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+                }
+            } else {
+<span class="fc" id="L361">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+<span class="nc" id="L363">        } catch (IOException e) {</span>
+<span class="nc" id="L364">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L365">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * 
+     * PUT mapping for increasing the quantity of a keyboard in a user's shopping
+     * cart.
+     * 
+     * @param keyboard the keyboard whose quantity is being increased.
+     * @param username the username of the user whose cart is being updated.
+     * @return ResponseEntity&lt;User&gt; containing the updated user object and
+     *         HttpStatus.CREATED if the cart was updated successfully.
+     *         ResponseEntity with HttpStatus.NOT_FOUND if the user was not found.
+     */
+    @PutMapping(&quot;/{username}/cart/increaseQuantity&quot;)
+    public ResponseEntity&lt;User&gt; increaseQuantity(@RequestBody Keyboard keyboard, @PathVariable String username) {
+<span class="fc" id="L382">        LOG.info(&quot;PUT /&quot; + username + &quot;/cart/increaseQuantity/&quot; + keyboard);</span>
+
+        try {
+<span class="fc" id="L385">            User currUser = userDAO.getUser(username);</span>
+<span class="pc bpc" id="L386" title="1 of 2 branches missed.">            if (currUser != null) {</span>
+<span class="fc" id="L387">                Keyboard keyboardUpdated = userDAO.getKeyboardFromCart(currUser, keyboard);</span>
+<span class="pc bpc" id="L388" title="1 of 2 branches missed.">                if (currUser.getUserCart().contains(keyboard)) {</span>
+<span class="nc" id="L389">                    userDAO.increaseQuantity(currUser, keyboardUpdated); </span>
+                }
+<span class="fc" id="L391">                return new ResponseEntity&lt;User&gt;(currUser, HttpStatus.CREATED);</span>
+            } else {
+<span class="nc" id="L393">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+
+<span class="nc" id="L396">        } catch (IOException e) {</span>
+<span class="nc" id="L397">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L398">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * 
+     * Decreases the quantity of a Keyboard in the cart of a given user.
+     * 
+     * @param keyboard the Keyboard to decrease the quantity of
+     * @param username the username of the user whose cart will have the Keyboard
+     *                 quantity decreased
+     * @return a ResponseEntity containing the updated User object if successful, or
+     *         an error status if not
+     */
+    @PutMapping(&quot;/{username}/cart/decreaseQuantity&quot;)
+    public ResponseEntity&lt;User&gt; decreaseQuantity(@RequestBody Keyboard keyboard, @PathVariable String username) {
+<span class="fc" id="L414">        LOG.info(&quot;PUT /&quot; + username + &quot;/cart/decreaseQuantity/&quot; + keyboard);</span>
+
+        try {
+<span class="fc" id="L417">            User currUser = userDAO.getUser(username);</span>
+<span class="pc bpc" id="L418" title="1 of 2 branches missed.">            if (currUser != null) {</span>
+<span class="fc" id="L419">                Keyboard keyboardUpdated = userDAO.getKeyboardFromCart(currUser, keyboard);</span>
+<span class="pc bpc" id="L420" title="1 of 2 branches missed.">                if (currUser.getUserCart().contains(keyboard)) {</span>
+<span class="nc" id="L421">                    userDAO.decreaseQuantity(currUser, keyboardUpdated);</span>
+                }
+<span class="fc" id="L423">                return new ResponseEntity&lt;User&gt;(currUser, HttpStatus.CREATED);</span>
+            } else {
+<span class="nc" id="L425">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+
+<span class="nc" id="L428">        } catch (IOException e) {</span>
+<span class="nc" id="L429">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L430">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+    /**
+     * 
+     * Gets the order history for a given user.
+     * 
+     * @param username the username of the user whose order history to retrieve
+     * @return a ResponseEntity containing an ArrayList of Keyboard objects
+     *         representing the user's order history if successful, or an error
+     *         status if not
+     * @throws IOException if there is an error accessing the data source
+     */
+    @GetMapping(&quot;/{username}/orders&quot;)
+    public ResponseEntity&lt;ArrayList&lt;Keyboard&gt;&gt; getUserOrderHistory(@PathVariable String username) throws IOException {
+<span class="fc" id="L446">        LOG.info(&quot;GET /&quot; + username + &quot;/orders&quot;);</span>
+
+<span class="fc" id="L448">        User currUser = userDAO.getUser(username);</span>
+<span class="fc bfc" id="L449" title="All 2 branches covered.">        if (currUser != null) {</span>
+<span class="fc" id="L450">            ArrayList&lt;Keyboard&gt; currUserOrderHistory = userDAO.getUserOrderHistory(currUser.getUsername());</span>
+<span class="fc bfc" id="L451" title="All 2 branches covered.">            if (currUserOrderHistory != null) {</span>
+<span class="fc" id="L452">                return new ResponseEntity&lt;ArrayList&lt;Keyboard&gt;&gt;(currUserOrderHistory, HttpStatus.OK);</span>
+            } else {
+<span class="fc" id="L454">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+        } else {
+<span class="fc" id="L457">            return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+        }
+    }
+
+    /**
+     * 
+     * Adds a list of purchased keyboards to a user's order history and updates the
+     * inventory accordingly.
+     * 
+     * @param keyboardsPurchased an ArrayList of Keyboard objects representing the
+     *                           keyboards purchased
+     * @param username           the username of the user who made the purchase
+     * @return a ResponseEntity containing the updated User object if successful, or
+     *         an error status if not
+     */
+    @PostMapping(&quot;/{username}/orders/addToOrderHistory&quot;)
+    public ResponseEntity&lt;User&gt; pushToOrderHistory(@RequestBody ArrayList&lt;Keyboard&gt; keyboardsPurchased,
+            @PathVariable String username) {
+<span class="fc" id="L475">        LOG.info(&quot;POST /&quot; + username + &quot;: &quot; + keyboardsPurchased);</span>
+
+        try {
+<span class="fc" id="L478">            User currUser = userDAO.getUser(username);</span>
+<span class="pc bpc" id="L479" title="1 of 2 branches missed.">            if (currUser != null) {</span>
+<span class="pc bpc" id="L480" title="1 of 2 branches missed.">                for (Keyboard currPurchased : keyboardsPurchased) {</span>
+<span class="nc bnc" id="L481" title="All 2 branches missed.">                    if (userDAO.addToUserOrderHistory(currUser, currPurchased, currPurchased.getQuantity())) {</span>
+<span class="nc" id="L482">                        Keyboard fromInventory = inventoryDAO.getKeyboard(currPurchased.getKeyboardId());</span>
+<span class="nc" id="L483">                        fromInventory.setQuantity(fromInventory.getQuantity() - currPurchased.getQuantity());</span>
+<span class="nc" id="L484">                        inventoryDAO.updateKeyboard(fromInventory);</span>
+                    }
+<span class="nc" id="L486">                }</span>
+<span class="fc" id="L487">                return new ResponseEntity&lt;User&gt;(currUser, HttpStatus.CREATED);</span>
+            } else {
+<span class="nc" id="L489">                return new ResponseEntity&lt;&gt;(HttpStatus.NOT_FOUND);</span>
+            }
+
+<span class="nc" id="L492">        } catch (IOException e) {</span>
+<span class="nc" id="L493">            LOG.log(Level.SEVERE, e.getLocalizedMessage());</span>
+<span class="nc" id="L494">            return new ResponseEntity&lt;&gt;(HttpStatus.INTERNAL_SERVER_ERROR);</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">estore-api</a> &gt; <a href="index.source.html" class="el_package">com.estore.api.estoreapi.model</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.estore.api.estoreapi.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * class which handles User objects
+ * keeps track of username, order history,
+ * and shopping cart as variables for each user
+ * 
+ * 
+ * @author Justin Ronca
+ */
+public class User {
+
+    static final String STRING_FORMAT = &quot;User [username=%s, password=%s, orderHistory=%s, cart=%s, login_status=%s]&quot;;
+
+    // declare User variables
+    @JsonProperty(&quot;username&quot;)
+    private String username;
+    @JsonProperty(&quot;password&quot;)
+    private String password;
+    @JsonProperty(&quot;userOrderHistory&quot;)
+    private ArrayList&lt;Keyboard&gt; orderHistory;
+    @JsonProperty(&quot;userCart&quot;)
+    private ArrayList&lt;Keyboard&gt; cart;
+    @JsonProperty(&quot;loginStatus&quot;)
+    private boolean loginStatus;
+
+    /**
+     * constructor to create a new user
+     * receives properties from a json file storing information
+     * 
+     * @param username     the input name of the user account
+     * @param orderHistory the history of the user's past orders as a list of
+     *                     Keyboards
+     * @param cart         the user's shopping cart in its current state
+     * 
+     *                     Important: one attribute of the User object but isn't
+     *                     created by the user is loginStatus. This is an
+     *                     attribute modified by the system.
+     */
+<span class="fc" id="L44">    public User(@JsonProperty(&quot;username&quot;) String username, @JsonProperty(&quot;password&quot;) String password) {</span>
+<span class="fc" id="L45">        this.username = username;</span>
+<span class="fc" id="L46">        this.password = password;</span>
+<span class="fc" id="L47">        this.orderHistory = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L48">        this.cart = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L49">        this.loginStatus = true;</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * 
+     * Returns the username of this User object.
+     * 
+     * @return the username of this User object.
+     */
+    public String getUsername() {
+<span class="fc" id="L59">        return this.username;</span>
+    }
+
+    /**
+     * 
+     * Sets the username of this User object to the specified String.
+     * 
+     * @param username the String to set as the username of this User object.
+     */
+    public void setUsername(String username) {
+<span class="fc" id="L69">        this.username = username;</span>
+<span class="fc" id="L70">    }</span>
+
+    /**
+     * 
+     * Returns the password of this User object.
+     * 
+     * @return the password of this User object.
+     */
+    public String getPassword() {
+<span class="fc" id="L79">        return this.password;</span>
+    }
+
+    /**
+     * 
+     * Sets the password of this User object to the specified String.
+     * 
+     * @param username the String to set as the password of this User object.
+     */
+    public void setPassword(String password) {
+<span class="fc" id="L89">        this.password = password;</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * 
+     * Returns an ArrayList of Keyboard objects representing the order history of
+     * this User object.
+     * 
+     * @return an ArrayList of Keyboard objects representing the order history of
+     *         this User object.
+     */
+    public ArrayList&lt;Keyboard&gt; getUserOrderHistory() {
+<span class="fc" id="L101">        return this.orderHistory;</span>
+    }
+
+    /**
+     * 
+     * Sets the order history of this User object to the specified ArrayList of
+     * Keyboard objects.
+     * 
+     * @param userOrderHistory the ArrayList of Keyboard objects to set as the order
+     *                         history of this User object.
+     */
+    public void setUserOrderHistory(ArrayList&lt;Keyboard&gt; orderHistory) {
+<span class="fc" id="L113">        this.orderHistory = orderHistory;</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * 
+     * Returns an ArrayList of Keyboard objects representing the items in the
+     * shopping cart of this User object.
+     * 
+     * @return an ArrayList of Keyboard objects representing the items in the
+     *         shopping cart of this User object.
+     */
+    public ArrayList&lt;Keyboard&gt; getUserCart() {
+<span class="fc" id="L125">        return this.cart;</span>
+    }
+
+    /**
+     * 
+     * Sets the shopping cart of this User object to the specified ArrayList of
+     * Keyboard objects.
+     * 
+     * @param userCart the ArrayList of Keyboard objects to set as the shopping cart
+     *                 of this User object.
+     */
+    public void setUserCart(ArrayList&lt;Keyboard&gt; cart) {
+<span class="fc" id="L137">        this.cart = cart;</span>
+<span class="fc" id="L138">    }</span>
+
+    /**
+     * 
+     * Returns a boolean indicating whether this User object is currently logged in
+     * or not.
+     * 
+     * @return true if this User object is currently logged in; false otherwise.
+     */
+    public boolean isLoginStatus() {
+<span class="fc" id="L148">        return this.loginStatus;</span>
+    }
+
+    /**
+     * 
+     * Returns a boolean indicating whether this User object is currently logged in
+     * or not.
+     * 
+     * @return true if this User object is currently logged in; false otherwise.
+     */
+    public boolean getLoginStatus() {
+<span class="fc" id="L159">        return this.loginStatus;</span>
+    }
+
+    /**
+     * 
+     * Sets the login status of this User object to the specified boolean value.
+     * 
+     * @param loginStatus the boolean value to set as the login status of this User
+     *                    object.
+     */
+    public void setLoginStatus(boolean loginStatus) {
+<span class="fc" id="L170">        this.loginStatus = loginStatus;</span>
+<span class="fc" id="L171">    }</span>
+
+    /**
+     * 
+     * Returns a String representation of the User object.
+     * The returned String is formatted using the String.format() method,
+     * with the format specified by the STRING_FORMAT constant and the username
+     * parameter.
+     * 
+     * @return a String representation of the User object.
+     */
+    @Override
+    public String toString() {
+<span class="fc" id="L184">        return String.format(STRING_FORMAT, username, password, orderHistory, cart, loginStatus);</span>
+    }
+
+    /**
+     * 
+     * Compares this User object to the specified Object.
+     * The method returns true if the specified Object is also a User object and has
+     * the same username as this User object.
+     * 
+     * @param obj the Object to compare with this User object.
+     * @return true if the specified Object is equal to this User object; false
+     *         otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+<span class="pc bpc" id="L199" title="1 of 2 branches missed.">        if (obj instanceof User) {</span>
+<span class="fc" id="L200">            User user = (User) obj;</span>
+<span class="fc" id="L201">            return this.getUsername().equals(user.getUsername());</span>
+        }
+<span class="nc" id="L203">        return false;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
