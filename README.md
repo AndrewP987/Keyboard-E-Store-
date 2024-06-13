@@ -1,5 +1,4 @@
 # E-Store:  Keyboard E-Store
-# Modify this document to expand any and all sections that are applicable for a better understanding from your users/testers/collaborators (remove this comment and other instructions areas for your FINAL release)
 
 An online E-store system built in Java, Spring, Angular, and Typescript
   
